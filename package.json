@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "description": "Cloudflare Workers for www.mozilla.org",
   "scripts": {
+    "pretest": "./node_modules/.bin/eslint .",
     "test": "mocha --timeout 20000"
   },
   "repository": {
@@ -18,6 +19,7 @@
   "devDependencies": {
     "@dollarshaveclub/cloudworker": "^0.1.1",
     "chai": "^4.2.0",
+    "eslint": "^6.5.1",
     "mocha": "^6.2.1",
     "sinon": "^7.5.0"
   }

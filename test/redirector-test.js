@@ -7,7 +7,7 @@ const sinon = require('sinon');
 
 
 before(async function () {
-    context = new (require('@dollarshaveclub/cloudworker'))(require('fs').readFileSync('workers/redirector.js', 'utf8')).context;
+    const context = new (require('@dollarshaveclub/cloudworker'))(require('fs').readFileSync('workers/redirector.js', 'utf8')).context;
     global.Request = context.Request
     global.URL = context.URL
     global.handleRequest = context.handleRequest;
@@ -15,30 +15,39 @@ before(async function () {
 
 describe('Redirector Worker', function() {
 
-    it('returns a 200 for requests that have a matching response, but are not within sample rate', async function () {
-        Math.random = sinon.stub().returns(0.6534);
-        const url = new URL('https://www-dev.allizom.org/en-US/firefox/new/');
+    it('should return a 200 for requests that have a matching response, but are not within sample rate', async function () {
+        Math.random = sinon.stub().returns(0.8534);
+        const url = new URL('https://bedrock-stage.gcp.moz.works/en-US/firefox/new/');
         const req = new Request(url);
-        const res = await handleRequest(req);
+        const res = await global.handleRequest(req);
         expect(res.status).to.equal(200);
-        expect(res.url).to.equal('https://www-dev.allizom.org/en-US/firefox/new/');
+        expect(res.url).to.equal('https://bedrock-stage.gcp.moz.works/en-US/firefox/new/');
     });
 
-    it('returns a 302 for requests that have a matching response, and are within sample rate', async function () {
-        Math.random = sinon.stub().returns(0.4567);
-        const url = new URL('https://www-dev.allizom.org/en-US/firefox/new/');
+    it('should return a 302 for requests that have a matching response, and are within sample rate', async function () {
+        Math.random = sinon.stub().returns(0.0001);
+        const url = new URL('https://bedrock-stage.gcp.moz.works/en-US/firefox/new/');
         const req = new Request(url);
-        const res = await handleRequest(req);
+        const res = await global.handleRequest(req);
         expect(res.status).to.equal(302);
-        expect(res.headers.get('location')).to.equal('https://www-dev.allizom.org/en-US/exp/firefox/new/');
+        expect(res.headers.get('location')).to.equal('https://bedrock-stage.gcp.moz.works/en-US/exp/firefox/new/');
     });
 
-    it('returns a 200 if the request does not have a matching redirect', async function() {
-        const url = new URL('https://www-dev.allizom.org/en-US/firefox/');
+    it('should preserve query string parameters when redirecting the URL', async function() {
+        Math.random = sinon.stub().returns(0.0001);
+        const url = new URL('https://bedrock-stage.gcp.moz.works/en-US/firefox/new/?foo=bar');
         const req = new Request(url);
-        const res = await handleRequest(req);
+        const res = await global.handleRequest(req);
+        expect(res.status).to.equal(302);
+        expect(res.headers.get('location')).to.equal('https://bedrock-stage.gcp.moz.works/en-US/exp/firefox/new/?foo=bar');
+    });
+
+    it('should return a 200 if the request does not have a matching redirect', async function() {
+        const url = new URL('https://bedrock-stage.gcp.moz.works/en-US/firefox/');
+        const req = new Request(url);
+        const res = await global.handleRequest(req);
         expect(res.status).to.equal(200);
-        expect(res.url).to.equal('https://www-dev.allizom.org/en-US/firefox/');
+        expect(res.url).to.equal('https://bedrock-stage.gcp.moz.works/en-US/firefox/');
     });
 });
 

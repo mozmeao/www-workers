@@ -4,27 +4,21 @@
 
 /**
  * This is a custom URL redirector implemented as a CloudFlare Worker.
- * The role of the worker is to redirect a predefined % of traffic 
+ * The role of the worker is to redirect a predefined % of traffic
  * to a different URL (used for A/B testing).
  * API documentation can be found at https://developers.cloudflare.com/workers/
  */
 
 /**
- * The origin that the worker is to be run on.
- * (e.g. https://www.allizom.org, https://www.mozilla.org).
- */
-const origin = 'https://www-dev.allizom.org';
-
-/**
- * `targetURL` is the URL that the worker looks to match against.
- * `sandboxURL` is the experiment URL to redirect to.
+ * `targetPath` is the target pathname that the worker looks to match against.
+ * `sandboxPath` is the sandbox experiment pathname to redirect to.
  * `sampleRate` is the proporation of traffic that should be redirected (a value of 0.1 equates to 10%).
  */
 const experimentPages = [
     {
-        'targetURL': `${origin}/en-US/firefox/new/`,
-        'sandboxURL': `${origin}/en-US/exp/firefox/new/`,
-        'sampleRate': 0.5
+        'targetPath': `/en-US/firefox/new/`,
+        'sandboxPath': `/en-US/exp/firefox/new/`,
+        'sampleRate': 0.06
     }
 ];
 
@@ -36,19 +30,20 @@ async function handleRequest(request) {
     // Get the current request URL.
     const requestURL = new URL(request.url);
 
-    // Split out the search params from the rest of thew URL.
-    const url = `${requestURL.origin}${requestURL.pathname}`;
-    const params = requestURL.search;
+    // Split out search params from the origin and pathname.
+    const origin = requestURL.origin;
+    const pathname = requestURL.pathname;
+    const search = requestURL.search;
 
     // Check to see if the URL matches a route.
-    const match = experimentPages.filter(page => url === page.targetURL);
+    const match = experimentPages.filter(page => pathname === page.targetPath);
 
     if (match.length > 0) {
         // Assume only the first match found will be processed.
         const sandbox = match[0];
 
         // Get the experimental URL to redirect to.
-        const experimentURL = params ? `${sandbox.sandboxURL}${params}` : sandbox.sandboxURL;
+        const experimentURL = search ? `${origin}${sandbox.sandboxPath}${search}` : `${origin}${sandbox.sandboxPath}`;
 
         // Only redirect a pre-defined % of requests per-page.
         if (experimentURL && isWithinSampleRate(sandbox.sampleRate)) {
