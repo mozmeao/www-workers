@@ -17,37 +17,37 @@ describe('Redirector Worker', function() {
 
     it('should return a 200 for requests that have a matching response, but are not within sample rate', async function () {
         Math.random = sinon.stub().returns(0.8534);
-        const url = new URL('https://bedrock-stage.gcp.moz.works/de/firefox/new/');
+        const url = new URL('https://bedrock-stage.gcp.moz.works/en-US/firefox/new/');
         const req = new Request(url);
         const res = await global.handleRequest(req);
         expect(res.status).to.equal(200);
-        expect(res.url).to.equal('https://bedrock-stage.gcp.moz.works/de/firefox/new/');
+        expect(res.url).to.equal('https://bedrock-stage.gcp.moz.works/en-US/firefox/new/');
     });
 
     it('should return a 302 for requests that have a matching response, and are within sample rate', async function () {
         Math.random = sinon.stub().returns(0.0001);
-        const url = new URL('https://bedrock-stage.gcp.moz.works/de/firefox/new/');
+        const url = new URL('https://bedrock-stage.gcp.moz.works/en-US/firefox/new/');
         const req = new Request(url);
         const res = await global.handleRequest(req);
         expect(res.status).to.equal(302);
-        expect(res.headers.get('location')).to.equal('https://bedrock-stage.gcp.moz.works/de/exp/firefox/new/');
+        expect(res.headers.get('location')).to.equal('https://bedrock-stage.gcp.moz.works/en-US/exp/firefox/new/');
     });
 
     it('should preserve query string parameters when redirecting the URL', async function() {
         Math.random = sinon.stub().returns(0.0001);
-        const url = new URL('https://bedrock-stage.gcp.moz.works/de/firefox/new/?foo=bar');
+        const url = new URL('https://bedrock-stage.gcp.moz.works/en-US/firefox/new/?foo=bar');
         const req = new Request(url);
         const res = await global.handleRequest(req);
         expect(res.status).to.equal(302);
-        expect(res.headers.get('location')).to.equal('https://bedrock-stage.gcp.moz.works/de/exp/firefox/new/?foo=bar');
+        expect(res.headers.get('location')).to.equal('https://bedrock-stage.gcp.moz.works/en-US/exp/firefox/new/?foo=bar');
     });
 
     it('should return a 200 if the request does not have a matching redirect', async function() {
-        const url = new URL('https://bedrock-stage.gcp.moz.works/de/firefox/');
+        const url = new URL('https://bedrock-stage.gcp.moz.works/en-US/firefox/');
         const req = new Request(url);
         const res = await global.handleRequest(req);
         expect(res.status).to.equal(200);
-        expect(res.url).to.equal('https://bedrock-stage.gcp.moz.works/de/firefox/');
+        expect(res.url).to.equal('https://bedrock-stage.gcp.moz.works/en-US/firefox/');
     });
 });
 
