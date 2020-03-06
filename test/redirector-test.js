@@ -43,11 +43,11 @@ describe('Redirector Worker', function() {
     });
 
     it('should return a 200 if the request does not have a matching redirect', async function() {
-        const url = new URL('https://bedrock-stage.gcp.moz.works/en-US/firefox/');
+        const url = new URL('https://bedrock-stage.gcp.moz.works/en-US/firefox/browsers/');
         const req = new Request(url);
         const res = await global.handleRequest(req);
         expect(res.status).to.equal(200);
-        expect(res.url).to.equal('https://bedrock-stage.gcp.moz.works/en-US/firefox/');
+        expect(res.url).to.equal('https://bedrock-stage.gcp.moz.works/en-US/firefox/browsers/');
     });
 });
 
