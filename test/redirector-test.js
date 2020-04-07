@@ -15,11 +15,19 @@ before(async function () {
 
 describe('Redirector Worker', function() {
 
+    const experimentPages = [
+        {
+            'targetPath': `/en-US/firefox/new/`,
+            'sandboxPath': `/en-US/exp/firefox/new/`,
+            'sampleRate': 0.09
+        }
+    ];
+
     it('should return a 200 for requests that have a matching response, but are not within sample rate', async function () {
         Math.random = sinon.stub().returns(0.8534);
         const url = new URL('https://bedrock-stage.gcp.moz.works/en-US/firefox/new/');
         const req = new Request(url);
-        const res = await global.handleRequest(req);
+        const res = await global.handleRequest(req, experimentPages);
         expect(res.status).to.equal(200);
         expect(res.url).to.equal('https://bedrock-stage.gcp.moz.works/en-US/firefox/new/');
     });
@@ -28,7 +36,7 @@ describe('Redirector Worker', function() {
         Math.random = sinon.stub().returns(0.0001);
         const url = new URL('https://bedrock-stage.gcp.moz.works/en-US/firefox/new/');
         const req = new Request(url);
-        const res = await global.handleRequest(req);
+        const res = await global.handleRequest(req, experimentPages);
         expect(res.status).to.equal(302);
         expect(res.headers.get('location')).to.equal('https://bedrock-stage.gcp.moz.works/en-US/exp/firefox/new/');
     });
@@ -37,7 +45,7 @@ describe('Redirector Worker', function() {
         Math.random = sinon.stub().returns(0.0001);
         const url = new URL('https://bedrock-stage.gcp.moz.works/en-US/firefox/new/?foo=bar');
         const req = new Request(url);
-        const res = await global.handleRequest(req);
+        const res = await global.handleRequest(req, experimentPages);
         expect(res.status).to.equal(302);
         expect(res.headers.get('location')).to.equal('https://bedrock-stage.gcp.moz.works/en-US/exp/firefox/new/?foo=bar');
     });
@@ -45,9 +53,17 @@ describe('Redirector Worker', function() {
     it('should return a 200 if the request does not have a matching redirect', async function() {
         const url = new URL('https://bedrock-stage.gcp.moz.works/en-US/firefox/browsers/');
         const req = new Request(url);
-        const res = await global.handleRequest(req);
+        const res = await global.handleRequest(req, experimentPages);
         expect(res.status).to.equal(200);
         expect(res.url).to.equal('https://bedrock-stage.gcp.moz.works/en-US/firefox/browsers/');
+    });
+
+    it('should return a 200 if there are no experimental pages configured', async function() {
+        const url = new URL('https://bedrock-stage.gcp.moz.works/en-US/firefox/new/');
+        const req = new Request(url);
+        const res = await global.handleRequest(req, []);
+        expect(res.status).to.equal(200);
+        expect(res.url).to.equal('https://bedrock-stage.gcp.moz.works/en-US/firefox/new/');
     });
 });
 
