@@ -10,23 +10,18 @@
  */
 
 /**
- * `targetPath` is the target pathname that the worker looks to match against.
- * `sandboxPath` is the sandbox experiment pathname to redirect to.
- * `sampleRate` is the proporation of traffic that should be redirected (a value of 0.1 equates to 10%).
+ * `experimentPages` is an Array `[]` of Objects `{}` with the following key/value pairs:
+ * - `targetPath` is the target pathname that the worker looks to match against (e.g. `/en-US/firefox/new/`).
+ * - `sandboxPath` is the sandbox experiment pathname to redirect to e.g. (`/en-US/exp/firefox/new/`).
+ * - `sampleRate` is the proporation of traffic that should be redirected (a value of 0.1 equates to 10%).
  */
-const experimentPages = [
-    {
-        'targetPath': `/en-US/firefox/new/`,
-        'sandboxPath': `/en-US/exp/firefox/new/`,
-        'sampleRate': 0.09
-    }
-];
+const experimentPages = [];
 
 function isWithinSampleRate(SAMPLE_RATE) {
     return Math.random() < SAMPLE_RATE;
 }
 
-async function handleRequest(request) {
+async function handleRequest(request, experimentPages) {
     // Get the current request URL.
     const requestURL = new URL(request.url);
 
@@ -34,6 +29,11 @@ async function handleRequest(request) {
     const origin = requestURL.origin;
     const pathname = requestURL.pathname;
     const search = requestURL.search;
+
+    // If there are no experimentPages configured then return the original request.
+    if (!experimentPages || experimentPages.length === 0) {
+        return await fetch(request);
+    }
 
     // Check to see if the URL matches a route.
     const match = experimentPages.filter(page => pathname === page.targetPath);
@@ -56,5 +56,5 @@ async function handleRequest(request) {
 }
 
 addEventListener('fetch', event => {
-    event.respondWith(handleRequest(event.request))
+    event.respondWith(handleRequest(event.request, experimentPages))
 });
