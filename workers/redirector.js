@@ -15,7 +15,13 @@
  * - `sandboxPath` is the sandbox experiment pathname to redirect to e.g. (`/en-US/exp/firefox/new/`).
  * - `sampleRate` is the proporation of traffic that should be redirected (a value of 0.1 equates to 10%).
  */
-const experimentPages = [];
+const experimentPages = [
+    {
+        'targetPath': `/en-US/firefox/`,
+        'sandboxPath': `/en-US/exp/firefox/`,
+        'sampleRate': 0.30
+    }
+];
 
 function isWithinSampleRate(SAMPLE_RATE) {
     return Math.random() < SAMPLE_RATE;
