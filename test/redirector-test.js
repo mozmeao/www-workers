@@ -10,11 +10,12 @@ before(async function () {
     global.Request = context.Request;
     global.URL = context.URL;
     global.handleRequest = context.handleRequest;
+    global.experimentPages = context.getExperimentPages();
 });
 
 describe('Redirector Worker', function() {
 
-    const experimentPages = [
+    const experimentPagesStub = [
         {
             'targetPath': `/en-US/firefox/new/`,
             'sandboxPath': `/en-US/exp/firefox/new/`,
@@ -26,7 +27,7 @@ describe('Redirector Worker', function() {
         Math.random = sinon.stub().returns(0.8534);
         const url = new URL('https://bedrock-stage.gcp.moz.works/en-US/firefox/new/');
         const req = new Request(url);
-        const res = await global.handleRequest(req, experimentPages);
+        const res = await global.handleRequest(req, experimentPagesStub);
         expect(res.status).to.equal(200);
         expect(res.url).to.equal('https://bedrock-stage.gcp.moz.works/en-US/firefox/new/');
     });
@@ -35,7 +36,7 @@ describe('Redirector Worker', function() {
         Math.random = sinon.stub().returns(0.0001);
         const url = new URL('https://bedrock-stage.gcp.moz.works/en-US/firefox/new/');
         const req = new Request(url);
-        const res = await global.handleRequest(req, experimentPages);
+        const res = await global.handleRequest(req, experimentPagesStub);
         expect(res.status).to.equal(302);
         expect(res.headers.get('location')).to.equal('https://bedrock-stage.gcp.moz.works/en-US/exp/firefox/new/');
     });
@@ -44,7 +45,7 @@ describe('Redirector Worker', function() {
         Math.random = sinon.stub().returns(0.0001);
         const url = new URL('https://bedrock-stage.gcp.moz.works/en-US/firefox/new/?foo=bar');
         const req = new Request(url);
-        const res = await global.handleRequest(req, experimentPages);
+        const res = await global.handleRequest(req, experimentPagesStub);
         expect(res.status).to.equal(302);
         expect(res.headers.get('location')).to.equal('https://bedrock-stage.gcp.moz.works/en-US/exp/firefox/new/?foo=bar');
     });
@@ -52,7 +53,7 @@ describe('Redirector Worker', function() {
     it('should return a 200 if the request does not have a matching redirect', async function() {
         const url = new URL('https://bedrock-stage.gcp.moz.works/en-US/firefox/browsers/');
         const req = new Request(url);
-        const res = await global.handleRequest(req, experimentPages);
+        const res = await global.handleRequest(req, experimentPagesStub);
         expect(res.status).to.equal(200);
         expect(res.url).to.equal('https://bedrock-stage.gcp.moz.works/en-US/firefox/browsers/');
     });
@@ -63,6 +64,10 @@ describe('Redirector Worker', function() {
         const res = await global.handleRequest(req, []);
         expect(res.status).to.equal(200);
         expect(res.url).to.equal('https://bedrock-stage.gcp.moz.works/en-US/firefox/new/');
+    });
+
+    it('should be able to check data from redirector', async function() {
+        expect(global.experimentPages).to.be.an('array');
     });
 });
 

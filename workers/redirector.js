@@ -12,16 +12,25 @@
 /**
  * `experimentPages` is an Array `[]` of Objects `{}` with the following key/value pairs:
  * - `targetPath` is the target pathname that the worker looks to match against (e.g. `/en-US/firefox/new/`).
+ * - `workerPath` is the pathname that cloudflare will send to this worker (e.g. `/en-us/firefox/*` .
  * - `sandboxPath` is the sandbox experiment pathname to redirect to e.g. (`/en-US/exp/firefox/new/`).
  * - `sampleRate` is the proporation of traffic that should be redirected (a value of 0.1 equates to 10%).
  */
 const experimentPages = [
     {
         'targetPath': `/en-US/firefox/`,
+        'workerPath': `/en-US/firefox/*`,
         'sandboxPath': `/en-US/exp/firefox/`,
         'sampleRate': 0.30
     }
 ];
+
+// For testing only
+function getExperimentPages() {
+    return experimentPages;
+}
+getExperimentPages();
+// end testing export of the data
 
 function isWithinSampleRate(SAMPLE_RATE) {
     return Math.random() < SAMPLE_RATE;
