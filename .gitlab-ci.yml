@@ -1,0 +1,43 @@
+include:
+  - remote: "https://raw.githubusercontent.com/mozmeao/gitlab-library/master/javascript.yml"
+
+.www_worker_base:
+  resource_group: www-worker
+  variables:
+    wrangler_version: "1.8.4"
+  tags:
+    - meao
+    - aws
+
+www_worker_linter:
+  extends:
+    - .js_lint
+    - .www_worker_base
+
+www_worker_build:
+  extends:
+    - .js_build
+    - .www_worker_base
+
+www_worker_ut:
+  extends:
+    - .js_ut
+    - .www_worker_base
+
+www_worker_deploy_staging:
+  variables:
+    wrangler_env: "CF_STG_ZONE_ID"
+  extends:
+    - .wrangler_deploy
+    - .www_worker_base
+  only:
+    - stage
+
+www_worker_deploy_prod:
+  variables:
+    wrangler_env: "CF_PROD_ZONE_ID"
+  extends:
+    - .wrangler_deploy
+    - .www_worker_base
+  only:
+    - prod

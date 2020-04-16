@@ -5,7 +5,6 @@
 const expect = require('chai').expect;
 const sinon = require('sinon');
 
-
 before(async function () {
     const context = new (require('@dollarshaveclub/cloudworker'))(require('fs').readFileSync('workers/redirector.js', 'utf8')).context;
     global.Request = context.Request
