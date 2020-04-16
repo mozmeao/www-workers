@@ -1,19 +1,24 @@
-const fs = require('fs')
-const process = require('process')
-const TOML = require('@iarna/toml')
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+
+const fs = require('fs');
+const process = require('process');
+const TOML = require('@iarna/toml');
 
 const header = 'function addEventListener() {}; ';
 const footer = ' exports.experimentPages = experimentPages; ';
 const body = fs.readFileSync('./workers/redirector.js');
 var experimentPages = eval(header + body + footer);
 
-const stage_domain = "https://www.allizom.org"
-const prod_domain = "https://www.mozilla.org"
-var stage_routes = []
-var prod_routes = []
+const stageDomain = 'https://www.allizom.org';
+const prodDomain = 'https://www.mozilla.org';
+var stageRoutes = [];
+var prodRoutes = [];
 
-const toml_config_file = fs.readFileSync('./wrangler.toml');
-const toml_obj = TOML.parse(toml_config_file)
+const tomlConfigFile = fs.readFileSync('./wrangler.toml');
+const tomlObj = TOML.parse(tomlConfigFile);
 
 // Validate the data
 function pageValidate(page) {
@@ -36,25 +41,25 @@ function pageValidate(page) {
 }
 
 function buildRoutes(page) {
-    stage_routes.push(stage_domain + page.targetPath + '*')
-    prod_routes.push(prod_domain + page.targetPath + '*')
+    stageRoutes.push(stageDomain + page.targetPath + '*');
+    prodRoutes.push(prodDomain + page.targetPath + '*');
 }
 
 experimentPages.forEach (
   element => pageValidate(element)
-)
+);
 
 // Assemble Routes
 
 experimentPages.forEach (
   element => buildRoutes(element)
-)
+);
 
-toml_obj['env']['staging']['routes'] = stage_routes
-toml_obj['env']['prod']['routes'] = prod_routes
+tomlObj['env']['staging']['routes'] = stageRoutes;
+tomlObj['env']['prod']['routes'] = prodRoutes;
 
 // Write routes out to wrangler.toml
-fs.writeFileSync('./wrangler.toml', TOML.stringify(toml_obj))
+fs.writeFileSync('./wrangler.toml', TOML.stringify(tomlObj));
 
-console.log("done building the custom routes!")
+console.log('done building the custom routes!');
 

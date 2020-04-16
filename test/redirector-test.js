@@ -7,8 +7,8 @@ const sinon = require('sinon');
 
 before(async function () {
     const context = new (require('@dollarshaveclub/cloudworker'))(require('fs').readFileSync('workers/redirector.js', 'utf8')).context;
-    global.Request = context.Request
-    global.URL = context.URL
+    global.Request = context.Request;
+    global.URL = context.URL;
     global.handleRequest = context.handleRequest;
 });
 
