@@ -65,9 +65,19 @@ describe('Redirector Worker', function() {
         expect(res.status).to.equal(200);
         expect(res.url).to.equal('https://bedrock-stage.gcp.moz.works/en-US/firefox/new/');
     });
+});
 
+describe('experiment pages tests', function() {
     it('should be able to check data from redirector', async function() {
         expect(global.experimentPages).to.be.an('array');
     });
-});
 
+    // For discussion, it seems like global is only available inside a test, do we want to,
+    // or can we, generate a mini-suite of tests?
+    it('test the contents of experiment pages', async function() {
+        global.experimentPages.forEach(function (value) {
+            expect(value['sampleRate']).to.be.above(0);
+            expect(value['sampleRate']).to.be.below(1);
+        });
+    });
+});

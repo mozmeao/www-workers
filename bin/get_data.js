@@ -42,13 +42,13 @@ const tomlObj = TOML.parse(tomlConfigFile);
 
 function buildRoutes(page) {
     var stageFullPath = stageDomain + page.workerPath;
-    var prodFullPath = stageDomain + page.workerPath;
+    var prodFullPath = prodDomain + page.workerPath;
 
 
-    if (!(stageRoutes.include(stageFullPath))) {
+    if (!(stageRoutes.includes(stageFullPath))) {
         stageRoutes.push(stageFullPath);
     }
-    if (!(prodRoutes.include(prodFullPath))) {
+    if (!(prodRoutes.includes(prodFullPath))) {
         prodRoutes.push(prodFullPath);
     }
 }
