@@ -3,7 +3,7 @@ type = "javascript"
 workers_dev = false
 
 [env.staging]
-name = "firefox-cro-redirector"
+name = "firefox-cro-redirector-stage"
 routes = [ "https://www.allizom.org/en-US/firefox/*" ]
 
 [env.prod]
