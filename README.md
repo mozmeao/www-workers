@@ -32,7 +32,7 @@ const experimentPages = [
 ];
 ```
 
-You should also check that the paths we're going to configure the workers to is accurate.  Given the 'targetPath's from experimentPages, make sure all of them match the patterns in workerPaths. In general, make sure that there is an allizom.org for staging, and a mozilla.org for prod with paths that have a wildcard in the last element of the path. In this example, `/new/` becomes `/*`, which is correct.
+You should also check that the paths we're going to configure the workers to is accurate.  Given the 'targetPath's from experimentPages, make sure all of them match the patterns in workerPaths. In general, make sure that there are `allizom.org` paths for staging, and `mozilla.org` for prod with paths that either have a wildcard in the last element of the path (or the one path you want to modify explicitly spelled out). In this example, `/new/` becomes `/*`, which is correct.  To target just /firefox 'https://www.allizom.org/en-US/firefox/' is correct.
 
 Paths here should fully include the experiments, as tightly as possible. Too broad will lead to more worker calls than necessary.  Too narrow will make the experiments not work.
 
