@@ -10,8 +10,21 @@ before(async function () {
     global.Request = context.Request;
     global.URL = context.URL;
     global.handleRequest = context.handleRequest;
-    global.experimentPages = context.getExperimentPages();
+    global.experimentPages = context.getData()['experimentPages'];
+    global.workerPaths = context.getData()['workerPaths'];
 });
+
+// helper function to validate paths
+function isValidPath(path) {
+  try {
+    const fullURL = 'http://fake.org' + path;
+    new URL(fullURL);
+  } catch (_) {
+    return false;
+  }
+
+  return true;
+}
 
 describe('Redirector Worker', function() {
 
@@ -67,17 +80,47 @@ describe('Redirector Worker', function() {
     });
 });
 
-describe('experiment pages tests', function() {
+describe('Configuration Data', function() {
     it('should be able to check data from redirector', async function() {
         expect(global.experimentPages).to.be.an('array');
     });
 
-    // For discussion, it seems like global is only available inside a test, do we want to,
-    // or can we, generate a mini-suite of tests?
-    it('test the contents of experiment pages', async function() {
+    it('should have good content in experiment pages hashes', async function() {
         global.experimentPages.forEach(function (value) {
+            expect(value).to.have.property('targetPath');
+            expect(value).to.have.property('sandboxPath');
+            expect(value).to.have.property('sampleRate');
+
+            // A common mistake might be to accidentally point at same source and destination
+            // This test ensures there is some difference.
+            expect(value['targetPath']).to.not.be.equal(value['sandboxPath']);
+
+            // Doing some light testing that the paths are reasonable
+            // when merged with a domain, they ought to be valid urls
+            // otherwise nothing will ever reach them.
+            expect(isValidPath(value['targetPath'])).to.be.true;
+            expect(isValidPath(value['sandboxPath'])).to.be.true;
+
+
             expect(value['sampleRate']).to.be.above(0);
             expect(value['sampleRate']).to.be.below(1);
+            // TODO: write tests for other attributes
         });
+    });
+
+    it('should workerpaths have staging key', async function() {
+        expect(global.workerPaths).to.have.property('staging');
+    });
+
+    it('should workerpaths stagingvalue be an array', async function() {
+        expect(global.workerPaths['staging']).to.be.an('array');
+    });
+
+    it('should workerpaths have prod key', async function() {
+        expect(global.workerPaths).to.have.property('prod');
+    });
+
+    it('should workerpaths prod value be an array', async function() {
+        expect(global.workerPaths['prod']).to.be.an('array');
     });
 });

@@ -32,6 +32,17 @@ const experimentPages = [
 ];
 ```
 
+You should also check that the paths we're going to configure the workers to is accurate.  Given the 'targetPath's from experimentPages, make sure all of them match the patterns in workerPaths. In general, make sure that there is an allizom.org for staging, and a mozilla.org for prod with paths that have a wildcard in the last element of the path. In this example, `/new/` becomes `/*`, which is correct.
+
+Paths here should fully include the experiments, as tightly as possible. Too broad will lead to more worker calls than necessary.  Too narrow will make the experiments not work.
+
+```javascript
+const workerPaths = { // eslint-disable-line no-unused-vars
+    'staging': ['https://www.allizom.org/en-US/firefox/*'],
+    'prod': ['https://www.mozilla.org/en-US/firefox/*']
+};
+```
+
 ## Wrangler configuration
 
 As part of the yarn install process, configured as a postinstall step in package.json, we are running a script in bin/get_data.js that will read the experimentPages block from redirector.js, and do some light validation, then write out to wrangler.toml the paths we want to end up hitting redirector.js.  The domains are hardcoded in that file, so if that changes for whatever reason, you'll need to update that file.
