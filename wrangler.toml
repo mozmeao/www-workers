@@ -1,4 +1,4 @@
-name = "firefox-cro-redirector"
+name = "firefox-cro-redirector-dev"
 type = "javascript"
 workers_dev = false
 
