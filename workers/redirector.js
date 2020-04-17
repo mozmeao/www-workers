@@ -31,7 +31,7 @@ const experimentPages = [
  * @type {{prod: [string], staging: [string]}}
  */
 
-const workerPaths = { // eslint-disable-line no-unused-vars
+const workerPaths = {
     'staging': ['https://www.allizom.org/en-US/firefox/*'],
     'prod': ['https://www.mozilla.org/en-US/firefox/*']
 };

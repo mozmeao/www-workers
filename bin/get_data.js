@@ -14,7 +14,6 @@ var workerPaths = eval(header + body + footer);
 const tomlConfigFile = fs.readFileSync('./wrangler.toml');
 const tomlObj = TOML.parse(tomlConfigFile);
 
-
 tomlObj['env']['staging']['routes'] = workerPaths['staging'];
 tomlObj['env']['prod']['routes'] = workerPaths['prod'];
 

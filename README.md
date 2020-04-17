@@ -43,6 +43,22 @@ const workerPaths = { // eslint-disable-line no-unused-vars
 };
 ```
 
+## Turning off a worker
+
+To temporarily turn off a worker, you'll need to do two steps.
+
+1. in `redirector.js` set the workerPaths to an empty array (`[]`)
+1. in the wrangler.toml, add `workers_dev=true` to the correct section (staging or prod).
+
+By doing these steps, real paths for allizom/mozilla.org will no longer hit the worker.  The worker will still exist, but only be accessible at a special cloudflare dev domain.
+
+To delete entirely:
+1. remove the section from `wrangler.toml`
+1. update `bin/get_data.js` to not put paths into wrangler (look for line like `tomlObj['env']['staging']['routes']`)
+1. ensure the `workerPaths` object doesn't have the 'staging'/'prod' section.
+1. update `redirector-test.js` to not fail
+1. manually or with wrangler delete the worker.
+
 ## Wrangler configuration
 
 As part of the yarn install process, configured as a postinstall step in package.json, we are running a script in bin/get_data.js that will read the experimentPages block from redirector.js, and do some light validation, then write out to wrangler.toml the paths we want to end up hitting redirector.js.  The domains are hardcoded in that file, so if that changes for whatever reason, you'll need to update that file.
