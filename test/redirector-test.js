@@ -16,14 +16,14 @@ before(async function () {
 
 // helper function to validate paths
 function isValidPath(path) {
-  try {
-    const fullURL = 'http://fake.org' + path;
-    new URL(fullURL);
-  } catch (_) {
-    return false;
-  }
+    try {
+        const fullURL = 'http://fake.org' + path;
+        new URL(fullURL);
+    } catch (_) {
+        return false;
+    }
 
-  return true;
+    return true;
 }
 
 describe('Redirector Worker', function() {
@@ -101,10 +101,8 @@ describe('Configuration Data', function() {
             expect(isValidPath(value['targetPath'])).to.be.true;
             expect(isValidPath(value['sandboxPath'])).to.be.true;
 
-
             expect(value['sampleRate']).to.be.above(0);
             expect(value['sampleRate']).to.be.below(1);
-            // TODO: write tests for other attributes
         });
     });
 
