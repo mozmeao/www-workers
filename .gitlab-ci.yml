@@ -27,6 +27,7 @@ www_worker_ut:
 www_worker_deploy_staging:
   variables:
     wrangler_env: "CF_STG_ZONE_ID"
+    publish_env: "staging"
   extends:
     - .wrangler_deploy
     - .www_worker_base
@@ -36,6 +37,7 @@ www_worker_deploy_staging:
 www_worker_deploy_prod:
   variables:
     wrangler_env: "CF_PROD_ZONE_ID"
+    publish_env: "prod"
   extends:
     - .wrangler_deploy
     - .www_worker_base
