@@ -23,6 +23,28 @@ const experimentPages = [
     }
 ];
 
+/**
+ * `workerpaths` is an hash with a configuration for staging, and for prod, with a list of paths
+ *  we should direct traffic to the worker. If you need to add a new environment, make sure to update bin/get_data.js,
+ *  and .gitlab-ci.yml.
+ *  This hash should be kept in sync with the experiment pages object above.
+ * @type {{prod: [string], staging: [string]}}
+ */
+
+const workerPaths = {
+    'staging': ['https://www.allizom.org/en-US/firefox/*'],
+    'prod': ['https://www.mozilla.org/en-US/firefox/*']
+};
+
+
+function getData() { // eslint-disable-line no-unused-vars
+    const data = {
+        'experimentPages': experimentPages,
+        'workerPaths' : workerPaths
+    };
+    return data;
+}
+
 function isWithinSampleRate(SAMPLE_RATE) {
     return Math.random() < SAMPLE_RATE;
 }
@@ -62,5 +84,5 @@ async function handleRequest(request, experimentPages) {
 }
 
 addEventListener('fetch', event => {
-    event.respondWith(handleRequest(event.request, experimentPages))
+    event.respondWith(handleRequest(event.request, experimentPages));
 });

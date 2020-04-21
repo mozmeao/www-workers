@@ -1,0 +1,11 @@
+name = "firefox-cro-redirector-dev"
+type = "javascript"
+workers_dev = false
+
+[env.staging]
+name = "firefox-cro-redirector-stage"
+routes = [ "https://www.allizom.org/en-US/firefox/*" ]
+
+[env.prod]
+name = "firefox-cro-redirector-prod"
+routes = [ "https://www.mozilla.org/en-US/firefox/*" ]
