@@ -6,7 +6,7 @@
   "scripts": {
     "pretest": "./node_modules/.bin/eslint .",
     "test": "mocha --timeout 20000",
-    "postbuild": "node bin/get_data.js"
+    "postinstall": "node bin/get_data.js"
   },
   "repository": {
     "type": "git",
