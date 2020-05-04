@@ -42,8 +42,8 @@ const experimentPages = [
  */
 
 const workerPaths = {
-    'staging': ['https://www.allizom.org/en-US/firefox/*'],
-    'prod': ['https://www.mozilla.org/en-US/firefox/*']
+    'staging': ['https://www.allizom.org/en-US/*'],
+    'prod': ['https://www.mozilla.org/en-US/*']
 };
 
 
