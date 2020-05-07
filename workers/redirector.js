@@ -60,33 +60,42 @@ function isWithinSampleRate(SAMPLE_RATE) {
 }
 
 async function handleRequest(request, experimentPages) {
-    // Get the current request URL.
-    const requestURL = new URL(request.url);
+    try {
+        // Get the current request URL.
+        const requestURL = new URL(request.url);
 
-    // Split out search params from the origin and pathname.
-    const origin = requestURL.origin;
-    const pathname = requestURL.pathname;
-    const search = requestURL.search;
-
-    // If there are no experimentPages configured then return the original request.
-    if (!experimentPages || experimentPages.length === 0) {
-        return await fetch(request);
-    }
-
-    // Check to see if the URL matches a route.
-    const match = experimentPages.filter(page => pathname === page.targetPath);
-
-    if (match.length > 0) {
-        // Assume only the first match found will be processed.
-        const sandbox = match[0];
-
-        // Get the experimental URL to redirect to.
-        const experimentURL = search ? `${origin}${sandbox.sandboxPath}${search}` : `${origin}${sandbox.sandboxPath}`;
-
-        // Only redirect a pre-defined % of requests per-page.
-        if (experimentURL && isWithinSampleRate(sandbox.sampleRate)) {
-            return Response.redirect(experimentURL, 302);
+        if (!requestURL) {
+            return await fetch(request);
         }
+
+        // Split out search params from the origin and pathname.
+        const origin = requestURL.origin;
+        const pathname = requestURL.pathname;
+        const search = requestURL.search;
+
+        // If there are no experimentPages configured then return the original request.
+        if (!experimentPages || experimentPages.length === 0) {
+            return await fetch(request);
+        }
+
+        // Check to see if the URL matches a route.
+        const match = experimentPages.filter(page => pathname === page.targetPath);
+
+        if (match.length > 0) {
+            // Assume only the first match found will be processed.
+            const sandbox = match[0];
+
+            // Get the experimental URL to redirect to.
+            const experimentURL = search ? `${origin}${sandbox.sandboxPath}${search}` : `${origin}${sandbox.sandboxPath}`;
+
+            // Only redirect a pre-defined % of requests per-page.
+            if (experimentURL && isWithinSampleRate(sandbox.sampleRate)) {
+                return Response.redirect(experimentURL, 302);
+            }
+        }
+    } catch(e) {
+        // If a runtime error occurs, fetch the original request.
+        return await fetch(request);
     }
 
     // Fetch the original request if no redirect was fulfilled.
