@@ -29,7 +29,7 @@ const experimentPages = [
     {
         'targetPath': `/en-US/`,
         'sandboxPath': `/en-US/exp/`,
-        'sampleRate': 0.36
+        'sampleRate': 0.54
     }
 ];
 
