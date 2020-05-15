@@ -1,5 +1,5 @@
 include:
-  - remote: "https://raw.githubusercontent.com/mozmeao/gitlab-library/master/javascript.yml"
+  - remote: "https://raw.githubusercontent.com/mozmeao/gitlab-library/v1.0.0/job_imports.yml"
 
 .www_worker_base:
   resource_group: www-worker
