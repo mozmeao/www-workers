@@ -32,6 +32,11 @@ const experimentPages = [
         'sampleRate': 0.54
     },
     {
+        'targetPath': `/en-DE/`,
+        'sandboxPath': `/en-DE/exp/`,
+        'sampleRate': 0.30
+    },
+    {
         'targetPath': `/en-US/firefox/mobile/`,
         'sandboxPath': `/en-US/exp/firefox/mobile/`,
         'sampleRate': 0.30
