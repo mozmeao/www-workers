@@ -52,8 +52,8 @@ const experimentPages = [
  */
 
 const workerPaths = {
-    'staging': ['https://www.allizom.org/en-US/*'],
-    'prod': ['https://www.mozilla.org/en-US/*']
+    'staging': ['https://www.allizom.org/en-US/*', 'https://www.allizom.org/de/*'],
+    'prod': ['https://www.mozilla.org/en-US/*', 'https://www.mozilla.org/de/*']
 };
 
 
