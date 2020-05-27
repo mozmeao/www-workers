@@ -24,7 +24,7 @@ const experimentPages = [
     {
         'targetPath': `/en-US/firefox/new/`,
         'sandboxPath': `/en-US/exp/firefox/new/`,
-        'sampleRate': 0.18
+        'sampleRate': 0.06
     },
     {
         'targetPath': `/en-US/`,
