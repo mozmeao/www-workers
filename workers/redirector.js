@@ -15,7 +15,13 @@
  * - `sandboxPath` is the sandbox experiment pathname to redirect to e.g. (`/en-US/exp/firefox/new/`).
  * - `sampleRate` is the proporation of traffic that should be redirected (a value of 0.1 equates to 10%).
  */
-const experimentPages = [];
+const experimentPages = [
+    {
+        'targetPath': `/en-US/`,
+        'sandboxPath': `/en-US/exp/`,
+        'sampleRate': 0.42
+    },
+];
 
 /**
  * `workerpaths` is an hash with a configuration for staging, and for prod, with a list of paths
@@ -26,8 +32,8 @@ const experimentPages = [];
  */
 
 const workerPaths = {
-    'staging': [],
-    'prod': []
+    'staging': ['https://www.allizom.org/en-US/*'],
+    'prod': ['https://www.mozilla.org/en-US/*']
 };
 
 
