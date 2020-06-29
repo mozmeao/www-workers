@@ -42,8 +42,8 @@ const experimentPages = [
         'sampleRate': 0.68
     },
     {
-        'targetPath': `/de/firefox/new`,
-        'sandboxPath': `/de/exp/firefox/new`,
+        'targetPath': `/de/firefox/new/`,
+        'sandboxPath': `/de/exp/firefox/new/`,
         'sampleRate': 0.50
     },
 ];
