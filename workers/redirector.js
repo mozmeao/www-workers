@@ -26,6 +26,26 @@ const experimentPages = [
         'sandboxPath': `/en-US/exp/firefox/`,
         'sampleRate': 0.34
     },
+    {
+        'targetPath': `/en-US/firefox/accounts/`,
+        'sandboxPath': `/en-US/exp/firefox/accounts/`,
+        'sampleRate': 0.52
+    },
+    {
+        'targetPath': `/fr/firefox/`,
+        'sandboxPath': `/fr/exp/firefox/`,
+        'sampleRate': 0.51
+    },
+    {
+        'targetPath': `/de/firefox/`,
+        'sandboxPath': `/de/exp/firefox/`,
+        'sampleRate': 0.68
+    },
+    {
+        'targetPath': `/de/firefox/new`,
+        'sandboxPath': `/de/exp/firefox/new`,
+        'sampleRate': 0.50
+    },
 ];
 
 /**
@@ -37,8 +57,8 @@ const experimentPages = [
  */
 
 const workerPaths = {
-    'staging': ['https://www.allizom.org/en-US/*'],
-    'prod': ['https://www.mozilla.org/en-US/*']
+    'staging': ['https://www.allizom.org/en-US/*', 'https://www.allizom.org/de/*', 'https://www.allizom.org/fr/*'],
+    'prod': ['https://www.mozilla.org/en-US/*', 'https://www.mozilla.org/de/*', 'https://www.mozilla.org/fr/*']
 };
 
 
