@@ -17,16 +17,6 @@
  */
 const experimentPages = [
     {
-        'targetPath': `/en-US/`,
-        'sandboxPath': `/en-US/exp/`,
-        'sampleRate': 0.42
-    },
-    {
-        'targetPath': `/en-US/firefox/`,
-        'sandboxPath': `/en-US/exp/firefox/`,
-        'sampleRate': 0.34
-    },
-    {
         'targetPath': `/en-US/firefox/accounts/`,
         'sandboxPath': `/en-US/exp/firefox/accounts/`,
         'sampleRate': 0.52
