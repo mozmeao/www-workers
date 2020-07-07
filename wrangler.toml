@@ -3,8 +3,7 @@ type = "javascript"
 
 [env.staging]
 name = "firefox-cro-redirector-stage"
-workers_dev = true
 
 [env.prod]
 name = "firefox-cro-redirector-prod"
-workers_dev = true
+
