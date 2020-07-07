@@ -14,10 +14,24 @@ var workerPaths = eval(header + body + footer);
 // End of redirector.js import
 
 const tomlConfigFile = fs.readFileSync('./wrangler.toml');
-const tomlObj = TOML.parse(tomlConfigFile);
+var tomlObj = TOML.parse(tomlConfigFile);
 
-tomlObj['env']['staging']['routes'] = workerPaths['staging'];
-tomlObj['env']['prod']['routes'] = workerPaths['prod'];
+
+if (workerPaths['staging'].length > 0 ) {
+    tomlObj['env']['staging']['routes'] = workerPaths['staging'];
+    tomlObj['env']['staging']['workers_dev'] = false;
+} else {
+    tomlObj['env']['staging']['workers_dev'] = true;
+    delete tomlObj['env']['staging']['routes'];
+}
+
+if (workerPaths['prod'].length > 0 ) {
+    tomlObj['env']['prod']['routes'] = workerPaths['prod'];
+    tomlObj['env']['prod']['workers_dev'] = false;
+} else {
+    tomlObj['env']['prod']['workers_dev'] = true;
+    delete tomlObj['env']['prod']['routes'];
+}
 
 // Write routes out to wrangler.toml
 fs.writeFileSync('./wrangler.toml', TOML.stringify(tomlObj));
