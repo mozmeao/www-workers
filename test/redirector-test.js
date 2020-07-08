@@ -121,8 +121,4 @@ describe('Configuration Data', function() {
     it('should workerpaths prod value be an array', async function() {
         expect(global.workerPaths['prod']).to.be.an('array');
     });
-
-    it('should workerpaths be empty toml should not have ', async function() {
-        expect(global.tomlObj['env']).to.be.an('hash');
-    });
 });
