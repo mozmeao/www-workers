@@ -1,9 +1,9 @@
 name = "firefox-cro-redirector-dev"
 type = "javascript"
-workers_dev = false
 
 [env.staging]
 name = "firefox-cro-redirector-stage"
 
 [env.prod]
 name = "firefox-cro-redirector-prod"
+
